@@ -1,0 +1,6 @@
+{
+  "name": "Gemini Copilot",
+  "description": "A beautifully animated chat application that mimics the modern Copilot UI, powered by the Google Gemini API for intelligent, streaming responses.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

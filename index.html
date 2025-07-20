@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gemini Copilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #030712; /* gray-950 */
+        background-image: radial-gradient(circle at 1px 1px, #374151 /* gray-700 */ 1px, transparent 0);
+        background-size: 2rem 2rem;
+        overflow: hidden; /* Prevent body scroll on mobile */
+      }
+      /* Custom scrollbar for a more modern look */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1f2937; /* gray-800 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4b5563; /* gray-600 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #6b7280; /* gray-500 */
+      }
+      
+      /* --- Animation Keyframes & Classes --- */
+
+      /* Generic fade-in for containers */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out forwards;
+      }
+
+      /* Streaming text animation */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in-up {
+        animation: fadeInUp 0.4s ease-out forwards;
+      }
+      
+      /* Cinematic title reveal */
+      @keyframes reveal {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      .reveal-container {
+        display: inline-block;
+        line-height: 1.2em; /* Prevents clipping */
+        overflow: hidden;
+      }
+      .reveal-item {
+        display: inline-block;
+        transform: translateY(100%);
+        animation: reveal 0.7s cubic-bezier(0.3, 0.9, 0.3, 1) forwards;
+      }
+
+      /* Shiny button effect */
+      @keyframes shine {
+        to { left: 100%; }
+      }
+      .shiny-button:hover::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -75%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: skewX(-25deg);
+        animation: shine 0.8s forwards;
+      }
+
+      /* Orbiting loader */
+      @keyframes orbit {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      /* --- Responsive Layout --- */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 256px; /* w-64 */
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 40;
+      }
+      .sidebar-open .sidebar {
+        transform: translateX(0);
+      }
+      
+      .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0,0,0,0.6);
+        backdrop-filter: blur(2px);
+        z-index: 30;
+        opacity: 0;
+        pointer-events: none; /* Ignore clicks when hidden */
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      .sidebar-open .sidebar-overlay {
+        opacity: 1;
+        pointer-events: auto; /* Capture clicks when visible */
+      }
+
+      /* --- Modal styles --- */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0,0,0,0.7);
+        backdrop-filter: blur(4px);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+
+      .modal-container {
+        background-color: #1f2937; /* gray-800 */
+        border: 1px solid #374151; /* gray-700 */
+        border-radius: 0.75rem; /* rounded-xl */
+        padding: 1.5rem; /* p-6 */
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+      }
+
+      @keyframes modalIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95) translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      .animate-modal-in {
+        animation: modalIn 0.2s cubic-bezier(0, 0, 0.2, 1) forwards;
+      }
+      
+      /* Desktop layout */
+      @media (min-width: 768px) {
+        .sidebar {
+          position: static;
+          transform: translateX(0);
+        }
+        .mobile-header {
+            display: none;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.10.0",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
